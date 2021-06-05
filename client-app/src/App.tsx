@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Header, List } from 'semantic-ui-react';
 import { CHANNEL_API_ROUTE } from './constants/apiRoutes';
 
 function App() {
@@ -11,11 +12,14 @@ function App() {
 
   return (
     <div>
-      <ul>
+      <Header as='h2' icon>
+        <Header.Subheader>Slack</Header.Subheader>
+      </Header>
+      <List>
         {channels.map((channel) => (
-          <li key={channel.id}>{channel.name}</li>
+          <List.Item key={channel.id}>{channel.name}</List.Item>
         ))}
-      </ul>
+      </List>
     </div>
   );
 }
