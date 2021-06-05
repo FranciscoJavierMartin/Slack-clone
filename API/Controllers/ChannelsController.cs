@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Persistence;
 
 namespace API.Controllers
 {
@@ -7,24 +10,23 @@ namespace API.Controllers
   [Route("api/[controller]")]
   public class ChannelsController : ControllerBase
   {
-    public ChannelsController() { }
+    private readonly DataContext _context;
+
+    public ChannelsController(DataContext context)
+    {
+      _context = context;
+    }
 
     [HttpGet]
     public IActionResult GetChannels()
     {
-      return Ok(new List<string>{
-        ".NetCore",
-        "React",
-        "Angular"
-      });
+      return Ok(_context.Channels.ToList());
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetChannel(int id)
+    public IActionResult GetChannel(Guid id)
     {
-      return Ok(
-        ".NetCore"
-       );
+      return Ok(_context.Channels.FirstOrDefault(x => x.Id == id));
     }
   }
 }
