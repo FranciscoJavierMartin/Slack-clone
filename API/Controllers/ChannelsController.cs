@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace API.Controllers
@@ -11,22 +14,24 @@ namespace API.Controllers
   public class ChannelsController : ControllerBase
   {
     private readonly DataContext _context;
+    private readonly ILogger<ChannelsController> _logger;
 
-    public ChannelsController(DataContext context)
+    public ChannelsController(DataContext context, ILogger<ChannelsController> logger)
     {
-      _context = context;
+      _context = context ?? throw new ArgumentNullException(nameof(context));
+      _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     [HttpGet]
-    public IActionResult GetChannels()
+    public async Task<IActionResult> GetChannels()
     {
-      return Ok(_context.Channels.ToList());
+      return Ok(await _context.Channels.ToListAsync());
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetChannel(Guid id)
+    public async Task<IActionResult> GetChannel(Guid id)
     {
-      return Ok(_context.Channels.FirstOrDefault(x => x.Id == id));
+      return Ok(await _context.Channels.FirstOrDefaultAsync(x => x.Id == id));
     }
   }
 }
