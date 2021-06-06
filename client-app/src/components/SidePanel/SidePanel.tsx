@@ -1,11 +1,19 @@
-import React from 'react'
+import React from 'react';
+import { Menu } from 'semantic-ui-react';
+import UserPanel from './UserPanel';
 
-const SidePanel:React.FC = () => {
+const SidePanel: React.FC = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <Menu
+      size='large'
+      inverted
+      fixed='left'
+      vertical
+      style={{ background: '#4c3c4c', fontSize: '1.2rem' }}
+    >
+      <UserPanel />
+    </Menu>
+  );
+};
 
-export default SidePanel
+export default SidePanel;
