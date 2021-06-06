@@ -34,5 +34,10 @@ namespace API.Controllers
     {
       return await _mediator.Send(new Details.Query { Id = id });
     }
+
+    [HttpPost]
+    public async Task<Unit> CreateChannel([FromBody] Create.Command command){
+      return await _mediator.Send(command);
+    }
   }
 }
