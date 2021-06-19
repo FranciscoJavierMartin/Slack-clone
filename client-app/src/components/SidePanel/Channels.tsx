@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
-import { Button, Form, Icon, Input, Menu, Modal } from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Icon, Menu } from 'semantic-ui-react';
+import { CHANNEL_API_ROUTE } from '../../constants/apiRoutes';
+import { IChannel } from '../../models/channels';
+import ChannelItem from './ChannelItem';
+import ChannelForm from './ChannelForm';
 
 const Channels: React.FC = () => {
-  const [channels, setChannels] = useState<any[]>([]);
+  const [channels, setChannels] = useState<IChannel[]>([]);
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
 
-  const toggleModal = () => {
+  const toggleModal = (): void => {
     setModalIsVisible((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    axios.get<IChannel[]>(CHANNEL_API_ROUTE).then((response) => {
+      setChannels(response.data);
+    });
+  }, []);
 
   return (
     <>
@@ -23,32 +34,11 @@ const Channels: React.FC = () => {
             style={{ cursor: 'pointer' }}
           />
         </Menu.Item>
+        {channels.map((channel) => (
+          <ChannelItem key={channel.id} channel={channel} />
+        ))}
       </Menu.Menu>
-      <Modal basic open={modalIsVisible}>
-        <Modal.Header>Add Channel</Modal.Header>
-        <Modal.Content>
-          <Form>
-            <Form.Field>
-              <Input fluid label='Channel Name' name='channelName' />
-            </Form.Field>
-            <Form.Field>
-              <Input
-                fluid
-                label='Channel Description'
-                name='channelDescription'
-              />
-            </Form.Field>
-          </Form>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button basic color='green' inverted onClick={toggleModal}>
-            <Icon name='checkmark' /> Add
-          </Button>
-          <Button basic color='red' inverted onClick={toggleModal}>
-            <Icon name='remove' /> Cancel
-          </Button>
-        </Modal.Actions>
-      </Modal>
+      <ChannelForm modalIsVisible={modalIsVisible} toggleModal={toggleModal} />
     </>
   );
 };
