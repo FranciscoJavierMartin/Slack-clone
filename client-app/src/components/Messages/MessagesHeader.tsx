@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header, Icon, Segment } from 'semantic-ui-react';
+import SearchInput from './SearchInput';
 
 const MessagesHeader: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const MessagesHeader: React.FC = () => {
         </span>
         <Header.Subheader>2 Users</Header.Subheader>
       </Header>
+      <SearchInput />
     </Segment>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Segment, Comment } from 'semantic-ui-react';
+import MessageForm from './MessageForm';
 import MessagesHeader from './MessagesHeader';
 
 const Messages: React.FC = () => {
@@ -9,6 +10,7 @@ const Messages: React.FC = () => {
       <Segment>
         <Comment.Group></Comment.Group>
       </Segment>
+      <MessageForm />
     </>
   );
 };
