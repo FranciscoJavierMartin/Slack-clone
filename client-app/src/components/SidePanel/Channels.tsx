@@ -20,6 +20,10 @@ const Channels: React.FC = () => {
     });
   }, []);
 
+  const handleCreateChannel = (channel: IChannel) => {
+    setChannels((prevState) => [...prevState, channel]);
+  };
+
   return (
     <>
       <Menu.Menu style={{ paddingBottom: '2em' }}>
@@ -38,7 +42,7 @@ const Channels: React.FC = () => {
           <ChannelItem key={channel.id} channel={channel} />
         ))}
       </Menu.Menu>
-      <ChannelForm modalIsVisible={modalIsVisible} toggleModal={toggleModal} />
+      <ChannelForm modalIsVisible={modalIsVisible} toggleModal={toggleModal} handleCreateChannel={handleCreateChannel} />
     </>
   );
 };
