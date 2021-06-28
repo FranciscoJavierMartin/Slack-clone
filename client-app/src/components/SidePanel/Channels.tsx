@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Icon, Menu } from 'semantic-ui-react';
-import { CHANNEL_API_ROUTE } from '../../constants/apiRoutes';
 import { IChannel } from '../../models/channels';
 import ChannelItem from './ChannelItem';
 import ChannelForm from './ChannelForm';
+import agent from '../../api/agent';
 
 const Channels: React.FC = () => {
   const [channels, setChannels] = useState<IChannel[]>([]);
@@ -15,9 +14,7 @@ const Channels: React.FC = () => {
   };
 
   useEffect(() => {
-    axios.get<IChannel[]>(CHANNEL_API_ROUTE).then((response) => {
-      setChannels(response.data);
-    });
+    agent.Channels.list().then((response) => setChannels(response));
   }, []);
 
   const handleCreateChannel = (channel: IChannel) => {
@@ -42,7 +39,11 @@ const Channels: React.FC = () => {
           <ChannelItem key={channel.id} channel={channel} />
         ))}
       </Menu.Menu>
-      <ChannelForm modalIsVisible={modalIsVisible} toggleModal={toggleModal} handleCreateChannel={handleCreateChannel} />
+      <ChannelForm
+        modalIsVisible={modalIsVisible}
+        toggleModal={toggleModal}
+        handleCreateChannel={handleCreateChannel}
+      />
     </>
   );
 };
