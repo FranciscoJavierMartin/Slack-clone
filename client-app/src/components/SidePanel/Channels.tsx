@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
 import { IChannel } from '../../models/channels';
 import ChannelItem from './ChannelItem';
 import ChannelForm from './ChannelForm';
 import agent from '../../api/agent';
+import ChannelStore from '../../stores/ChannelStore';
 
 const Channels: React.FC = () => {
   const [channels, setChannels] = useState<IChannel[]>([]);
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
+  const channelStore = useContext(ChannelStore);
 
   const toggleModal = (): void => {
     setModalIsVisible((prevState) => !prevState);
@@ -29,6 +31,7 @@ const Channels: React.FC = () => {
 
   return (
     <>
+      <h1>{channelStore.title}</h1>
       <Menu.Menu style={{ paddingBottom: '2em' }}>
         <Menu.Item>
           <span>
