@@ -18,7 +18,13 @@ const Channels: React.FC = () => {
   }, []);
 
   const handleCreateChannel = (channel: IChannel) => {
-    setChannels((prevState) => [...prevState, channel]);
+    agent.Channels.create(channel)
+      .then(() => {
+        setChannels((prevState) => [...prevState, channel]);
+      })
+      .finally(() => {
+        toggleModal();
+      });
   };
 
   return (
