@@ -43,7 +43,7 @@ const Login: React.FC = () => {
           </Segment>
         </Form>
         <Message>
-          Already a user? <Link to={REGISTER_PAGE_ROUTE}>Login</Link>
+          Don't have an account? <Link to={REGISTER_PAGE_ROUTE}>Register</Link>
         </Message>
       </Grid.Column>
     </Grid>
