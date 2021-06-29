@@ -1,23 +1,18 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
-import SidePanel from './components/SidePanel/SidePanel';
-import ColorPanel from './components/ColorPanel/ColorPanel';
-import Messages from './components/Messages/Messages';
-import MetaPanel from './components/MetaPanel/MetaPanel';
+import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
+import Dashboard from './components/Dashboard/Dashboard';
+import { DASHBOARD_PAGE_ROUTE, LOGIN_PAGE_ROUTE, REGISTER_PAGE_ROUTE } from './constants/routes';
 
 function App() {
   return (
-    <Grid columns='equal' className='app'>
-      <ColorPanel />
-      <SidePanel />
-      <Grid.Column style={{ marginLeft: 320 }}>
-        <Messages />
-      </Grid.Column>
-      <Grid.Column width={4}>
-        <MetaPanel />
-      </Grid.Column>
-    </Grid>
+    <BrowserRouter>
+      <Route path={DASHBOARD_PAGE_ROUTE} exact component={Dashboard} />
+      <Route path={LOGIN_PAGE_ROUTE} exact component={Login} />
+      <Route path={REGISTER_PAGE_ROUTE} exact component={Register} />
+    </BrowserRouter>
   );
 }
 
