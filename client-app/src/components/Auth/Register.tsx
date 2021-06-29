@@ -1,5 +1,15 @@
 import React from 'react';
-import { Button, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import {
+  Button,
+  Form,
+  Grid,
+  Header,
+  Icon,
+  Message,
+  Segment,
+} from 'semantic-ui-react';
+import { LOGIN_PAGE_ROUTE } from '../../constants/routes';
 
 const Register: React.FC = () => {
   return (
@@ -48,6 +58,9 @@ const Register: React.FC = () => {
             </Button>
           </Segment>
         </Form>
+        <Message>
+          Already a user? <Link to={LOGIN_PAGE_ROUTE}>Login</Link>
+        </Message>
       </Grid.Column>
     </Grid>
   );
