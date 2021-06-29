@@ -1,37 +1,19 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
-import { IChannel } from '../../models/channels';
 import ChannelItem from './ChannelItem';
 import ChannelForm from './ChannelForm';
-import agent from '../../api/agent';
 import ChannelStore from '../../stores/ChannelStore';
+import { observer } from 'mobx-react-lite';
 
 const Channels: React.FC = () => {
-  const [channels, setChannels] = useState<IChannel[]>([]);
-  const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
-  const channelStore = useContext(ChannelStore);
-
-  const toggleModal = (): void => {
-    setModalIsVisible((prevState) => !prevState);
-  };
+  const { loadChannels, channels, toggleModal } = useContext(ChannelStore);
 
   useEffect(() => {
-    agent.Channels.list().then((response) => setChannels(response));
-  }, []);
-
-  const handleCreateChannel = (channel: IChannel) => {
-    agent.Channels.create(channel)
-      .then(() => {
-        setChannels((prevState) => [...prevState, channel]);
-      })
-      .finally(() => {
-        toggleModal();
-      });
-  };
+    loadChannels();
+  }, [loadChannels]);
 
   return (
     <>
-      <h1>{channelStore.title}</h1>
       <Menu.Menu style={{ paddingBottom: '2em' }}>
         <Menu.Item>
           <span>
@@ -48,13 +30,9 @@ const Channels: React.FC = () => {
           <ChannelItem key={channel.id} channel={channel} />
         ))}
       </Menu.Menu>
-      <ChannelForm
-        modalIsVisible={modalIsVisible}
-        toggleModal={toggleModal}
-        handleCreateChannel={handleCreateChannel}
-      />
+      <ChannelForm />
     </>
   );
 };
 
-export default Channels;
+export default observer(Channels);

@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { useContext, useState } from 'react';
 import { Button, Form, Icon, Input, Modal } from 'semantic-ui-react';
 import { IChannel } from '../../models/channels';
+import ChannelStore from '../../stores/ChannelStore';
 
-interface ChannelFormProps {
-  modalIsVisible: boolean;
-  toggleModal: () => void;
-  handleCreateChannel: (channel: IChannel) => void;
-}
+interface ChannelFormProps {}
 
-const ChannelForm: React.FC<ChannelFormProps> = ({
-  modalIsVisible,
-  toggleModal,
-  handleCreateChannel,
-}) => {
+const ChannelForm: React.FC<ChannelFormProps> = () => {
+  const { isModalVisible, toggleModal, createChannel } =
+    useContext(ChannelStore);
+
   const [channel, setChannel] = useState<IChannel>({
     name: '',
     description: '',
@@ -27,11 +24,11 @@ const ChannelForm: React.FC<ChannelFormProps> = ({
   };
 
   const handleSubmit = () => {
-    handleCreateChannel(channel);
+    createChannel(channel).finally(() => toggleModal());
   };
 
   return (
-    <Modal basic open={modalIsVisible}>
+    <Modal basic open={isModalVisible}>
       <Modal.Header>Add Channel</Modal.Header>
       <Modal.Content>
         <Form>
@@ -65,4 +62,4 @@ const ChannelForm: React.FC<ChannelFormProps> = ({
   );
 };
 
-export default ChannelForm;
+export default observer(ChannelForm);
