@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Middleware;
 using Application.Channels;
 using Domain;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +35,14 @@ namespace API
     public void ConfigureServices(IServiceCollection services)
     {
 
-      services.AddControllers();
+      services
+        .AddControllers()
+        .AddFluentValidation(cfg =>
+          {
+            cfg.RegisterValidatorsFromAssemblyContaining<Application.Channels.Create>();
+          });
+
+
       services.AddDbContext<DataContext>(x =>
       {
         x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
@@ -68,6 +77,7 @@ namespace API
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
       }
+      app.UseMiddleware<ErrorHandlingMiddleware>();
 
       app.UseRouting();
 
