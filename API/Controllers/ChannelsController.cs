@@ -12,32 +12,26 @@ using Persistence;
 
 namespace API.Controllers
 {
-  [ApiController]
-  [Route("api/[controller]")]
-  public class ChannelsController : ControllerBase
-  {
-    private readonly IMediator _mediator;
 
-    public ChannelsController(IMediator mediator)
-    {
-      _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-    }
+  public class ChannelsController : BaseController
+  {
 
     [HttpGet]
     public async Task<ActionResult<List<Channel>>> GetChannels()
     {
-      return await _mediator.Send(new List.Query());
+      return await Mediator.Send(new List.Query());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Channel>> GetChannel(Guid id)
     {
-      return await _mediator.Send(new Details.Query { Id = id });
+      return await Mediator.Send(new Details.Query { Id = id });
     }
 
     [HttpPost]
-    public async Task<Unit> CreateChannel([FromBody] Create.Command command){
-      return await _mediator.Send(command);
+    public async Task<Unit> CreateChannel([FromBody] Create.Command command)
+    {
+      return await Mediator.Send(command);
     }
   }
 }
