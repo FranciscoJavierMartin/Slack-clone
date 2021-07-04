@@ -1,8 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
-import { CHANNEL_API_ROUTE } from '../constants/apiRoutes';
+import {
+  CHANNEL_API_ROUTE,
+  LOGIN_API_ROUTE,
+  REGISTER_API_ROUTE,
+  CURRENT_USER_API_ROUTE,
+} from '../constants/apiRoutes';
 import { IChannel } from '../models/channels';
 import { history } from '../App';
 import { toast } from 'react-toastify';
+import { IUser, IUserFormValues } from '../models/users';
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
@@ -34,6 +40,15 @@ const Channels = {
   create: (channel: IChannel) => request.post(CHANNEL_API_ROUTE, channel),
 };
 
+const User = {
+  login: (userForm: IUserFormValues): Promise<IUser> =>
+    request.post(LOGIN_API_ROUTE, userForm),
+  register: (userForm: IUserFormValues): Promise<IUser> =>
+    request.post(REGISTER_API_ROUTE, userForm),
+  currentUser: (): Promise<IUser> => request.get(CURRENT_USER_API_ROUTE),
+};
+
 export default {
   Channels,
+  User,
 };
