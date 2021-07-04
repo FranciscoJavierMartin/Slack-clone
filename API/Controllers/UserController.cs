@@ -14,6 +14,7 @@ namespace API.Controllers
       return await Mediator.Send(query);
     }
 
+    // TODO: Uncomment when add DTO
     // [HttpPost("register")]
     // public async Task<ActionResult<User>> Register(Register.Command command)
     // {
