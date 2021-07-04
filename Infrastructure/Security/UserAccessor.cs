@@ -19,7 +19,7 @@ namespace Infrastructure.Security
         .HttpContext
         .User?
         .Claims?
-        .FirstOrDefault(x => x.Type == ClaimTypes.Name)
+        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
         .Value;
     }
   }
