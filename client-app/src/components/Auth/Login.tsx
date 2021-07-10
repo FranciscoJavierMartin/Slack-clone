@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { Form as FinalForm, Field } from 'react-final-form';
 import {
   Button,
   Form,
@@ -10,8 +11,25 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import { REGISTER_PAGE_ROUTE } from '../../constants/routes';
+import TextInput from '../Common/Form/TextInput';
+import { RootStoreContext } from '../../stores/rootStore';
+import { IUserFormValues } from '../../models/users';
+import { FORM_ERROR } from 'final-form';
+import { combineValidators, isRequired } from 'revalidate';
 
 const Login: React.FC = () => {
+  const validate = combineValidators({
+    email: isRequired('Email'),
+    password: isRequired('Password'),
+  });
+  const {
+    userStore: { login },
+  } = useContext(RootStoreContext);
+
+  const onSubmit = async (values: IUserFormValues) => {
+    return login(values).catch((error) => ({ [FORM_ERROR]: error }));
+  };
+
   return (
     <Grid textAlign='center' verticalAlign='middle' className='app'>
       <Grid.Column style={{ maxWidth: 450 }}>
@@ -19,29 +37,39 @@ const Login: React.FC = () => {
           <Icon name='puzzle piece' color='orange' />
           Login for NetChat
         </Header>
-        <Form size='large'>
-          <Segment stacked>
-            <Form.Input
-              fluid
-              name='email'
-              icon='mail'
-              iconPosition='left'
-              placeholder='Email address'
-              type='email'
-            />
-            <Form.Input
-              fluid
-              name='password'
-              icon='lock'
-              iconPosition='left'
-              placeholder='Password'
-              type='password'
-            />
-            <Button color='orange' fluid size='large'>
-              Login
-            </Button>
-          </Segment>
-        </Form>
+        <FinalForm
+          onSubmit={onSubmit}
+          validate={validate}
+          render={({ handleSubmit, submitting, values, form }) => (
+            <Form size='large' onSubmit={handleSubmit}>
+              <Segment stacked>
+                <Field
+                  name='email'
+                  placeholder='Email address'
+                  type='text'
+                  icon='mail icon'
+                  component={TextInput}
+                />
+                <Field
+                  name='password'
+                  placeholder='Password'
+                  type='password'
+                  icon='lock icon'
+                  component={TextInput}
+                />
+                <Button
+                  color='orange'
+                  fluid
+                  size='large'
+                  disabled={submitting}
+                  loading={submitting}
+                >
+                  Login
+                </Button>
+              </Segment>
+            </Form>
+          )}
+        ></FinalForm>
         <Message>
           Don't have an account? <Link to={REGISTER_PAGE_ROUTE}>Register</Link>
         </Message>

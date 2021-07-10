@@ -2,13 +2,14 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react';
 import { Button, Form, Icon, Input, Modal } from 'semantic-ui-react';
 import { IChannel } from '../../models/channels';
-import ChannelStore from '../../stores/ChannelStore';
+import { RootStoreContext } from '../../stores/rootStore';
 
 interface ChannelFormProps {}
 
 const ChannelForm: React.FC<ChannelFormProps> = () => {
-  const { isModalVisible, toggleModal, createChannel } =
-    useContext(ChannelStore);
+  const {
+    channelStore: { createChannel, toggleModal, isModalVisible },
+  } = useContext(RootStoreContext);
 
   const [channel, setChannel] = useState<IChannel>({
     name: '',

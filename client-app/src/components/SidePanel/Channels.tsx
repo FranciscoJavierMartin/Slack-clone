@@ -2,11 +2,13 @@ import React, { useEffect, useContext } from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
 import ChannelItem from './ChannelItem';
 import ChannelForm from './ChannelForm';
-import ChannelStore from '../../stores/ChannelStore';
 import { observer } from 'mobx-react-lite';
+import { RootStoreContext } from '../../stores/rootStore';
 
 const Channels: React.FC = () => {
-  const { loadChannels, channels, toggleModal } = useContext(ChannelStore);
+  const {
+    channelStore: { loadChannels, channels, toggleModal },
+  } = useContext(RootStoreContext);
 
   useEffect(() => {
     loadChannels();

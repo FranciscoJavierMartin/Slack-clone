@@ -1,13 +1,19 @@
-import React from 'react';
-import { Dropdown, Grid, Header, Icon } from 'semantic-ui-react';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { Dropdown, Grid, Header, Icon, Message } from 'semantic-ui-react';
+import { REGISTER_PAGE_ROUTE } from '../../constants/routes';
+import { RootStoreContext } from '../../stores/rootStore';
 
 const UserPanel: React.FC = () => {
+  const {
+    userStore: { user, logout, isLoggedIn },
+  } = useContext(RootStoreContext);
   const dropdownOptions = () => [
     {
       key: 'user',
       text: (
         <span>
-          Logged as <strong>User</strong>
+          Logged as <strong>{user?.userName}</strong>
         </span>
       ),
       disabled: true,
@@ -16,6 +22,11 @@ const UserPanel: React.FC = () => {
       key: 'avatar',
       text: <span>Change Avatar</span>,
       disabled: true,
+    },
+    {
+      key: 'signout',
+      text: <span onClick={logout}>Sign Out</span>,
+      disabled: false,
     },
   ];
 
@@ -29,10 +40,17 @@ const UserPanel: React.FC = () => {
           </Header>
         </Grid.Row>
         <Header style={{ padding: '0.25em' }} as='h4' inverted>
-          <Dropdown
-            trigger={<span>User</span>}
-            options={dropdownOptions()}
-          ></Dropdown>
+          {isLoggedIn && user ? (
+            <Dropdown
+              trigger={<span>{user?.userName}</span>}
+              options={dropdownOptions()}
+            ></Dropdown>
+          ) : (
+            <Message>
+              Don't has an account?{' '}
+              <Link to={REGISTER_PAGE_ROUTE}>Register</Link>
+            </Message>
+          )}
         </Header>
       </Grid.Column>
     </Grid>

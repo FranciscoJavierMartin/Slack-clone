@@ -9,6 +9,7 @@ import { IChannel } from '../models/channels';
 import { history } from '../App';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/users';
+import { LOCAL_STORAGE_JWT } from '../constants/localStorage';
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
@@ -17,14 +18,27 @@ axios.interceptors.response.use(undefined, (error) => {
 
   if (error.message === 'Network Error' && !error.response) {
     toast.error('Network Error - Make sure API is running');
-  } else {
-    if (status === 404) {
-      history.push('/not-found');
-    } else if (status === 500) {
-      toast.error('Server error - Check the terminal');
-    }
+  } else if (status === 404) {
+    history.push('/not-found');
+  } else if (status === 500) {
+    toast.error('Server error - Check the terminal');
   }
+
+  throw error.response;
 });
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem(LOCAL_STORAGE_JWT);
+
+    if (token) {
+      config.headers.authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 

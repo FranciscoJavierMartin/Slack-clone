@@ -1,21 +1,21 @@
-import { createContext } from 'react';
 import {
   observable,
   action,
   makeObservable,
-  configure,
   runInAction,
 } from 'mobx';
 import { IChannel } from '../models/channels';
 import agent from '../api/agent';
+import { RootStore } from './rootStore';
 
-configure({ enforceActions: 'always' });
-class ChannelStore {
+export default class ChannelStore {
   @observable channels: IChannel[] = [];
   @observable isModalVisible: boolean = false;
+  rootStore: RootStore;
 
-  constructor() {
+  constructor(rootStore: RootStore) {
     makeObservable(this);
+    this.rootStore = rootStore;
   }
 
   @action loadChannels = async () => {
@@ -42,5 +42,3 @@ class ChannelStore {
     }
   };
 }
-
-export default createContext(new ChannelStore());
