@@ -12,11 +12,12 @@ namespace Persistence
     }
 
     public DbSet<Channel> Channels { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
-      
+
       modelBuilder.Entity<Channel>()
       .HasData(new Channel
       {
@@ -36,6 +37,12 @@ namespace Persistence
         Name = "React",
         Description = "Channel dedicated to React"
       });
+
+      modelBuilder.Entity<Message>()
+        .HasOne(message => message.Sender)
+        .WithMany(message => message.Messages)
+        .HasForeignKey(message => message.SenderId);
+
       base.OnModelCreating(modelBuilder);
 
     }
