@@ -14,7 +14,7 @@ namespace Application.User
 {
   public class Register
   {
-    public class Command : IRequest<User>
+    public class Command : IRequest<UserDto>
     {
       public string UserName { get; set; }
       public string Email { get; set; }
@@ -40,7 +40,7 @@ namespace Application.User
       }
     }
 
-    public class Handler : IRequestHandler<Command, User>
+    public class Handler : IRequestHandler<Command, UserDto>
     {
       private readonly UserManager<AppUser> userManager;
       private readonly IJwtGenerator jwtGenerator;
@@ -52,7 +52,7 @@ namespace Application.User
       }
 
 
-      public async Task<User> Handle(Command request, CancellationToken cancellationToken)
+      public async Task<UserDto> Handle(Command request, CancellationToken cancellationToken)
       {
         var user = new AppUser
         {
@@ -63,7 +63,7 @@ namespace Application.User
         var result = await userManager.CreateAsync(user, request.Password);
 
         return result.Succeeded
-            ? new User
+            ? new UserDto
             {
               UserName = user.UserName,
               Email = user.Email,

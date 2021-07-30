@@ -12,7 +12,7 @@ namespace Application.User
 {
   public class Login
   {
-    public class Query : IRequest<User>
+    public class Query : IRequest<UserDto>
     {
       public string Email { get; set; }
       public string Password { get; set; }
@@ -27,7 +27,7 @@ namespace Application.User
       }
     }
 
-    public class Handler : IRequestHandler<Query, User>
+    public class Handler : IRequestHandler<Query, UserDto>
     {
       private readonly UserManager<AppUser> userManager;
       private readonly SignInManager<AppUser> signInManager;
@@ -42,7 +42,7 @@ namespace Application.User
         this.jwtGenerator = jwtGenerator;
       }
 
-      public async Task<User> Handle(Query request, CancellationToken cancellationToken)
+      public async Task<UserDto> Handle(Query request, CancellationToken cancellationToken)
       {
         var user = await userManager.FindByEmailAsync(request.Email);
 
@@ -54,7 +54,7 @@ namespace Application.User
         var result = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
         return result.Succeeded
-          ? new User { 
+          ? new UserDto { 
               Token = jwtGenerator.CreateToken(user), 
               UserName = user.UserName, 
               Email = user.Email 
